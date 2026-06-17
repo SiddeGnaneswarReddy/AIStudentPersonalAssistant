@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect, Link, useNavigate, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, Link, Navigate, useNavigate, useLocation } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ function AuthedLayout() {
   }
 
   if (!user) {
-    throw redirect({ to: "/auth" });
+    return <Navigate to="/auth" replace />;
   }
 
   async function signOut() {

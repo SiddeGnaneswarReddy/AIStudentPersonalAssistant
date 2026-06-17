@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -21,7 +21,7 @@ function AuthPage() {
   const [busy, setBusy] = useState(false);
 
   if (!loading && session) {
-    throw redirect({ to: "/" });
+    return <Navigate to="/" replace />;
   }
 
   async function submit(e: React.FormEvent) {
