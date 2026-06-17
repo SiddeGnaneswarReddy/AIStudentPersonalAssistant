@@ -46,7 +46,11 @@ npm run dev
 
 Your app will open at: **http://localhost:3000**
 
-> **Note:** AI-powered features (like PDF processing) rely on Lovable-managed secrets that only work in the cloud environment. Test those features on your **Lovable preview URL** instead of localhost.
+> **AI on localhost:** The Lovable AI key only works in the cloud. To make AI features work locally, create a `.env` file in the project root with:
+> ```
+> GROQ_API_KEY=your_groq_key_here
+> ```
+> Get a free key at https://console.groq.com/keys. On the Lovable preview/published URL, Lovable AI is used automatically and Groq is the fallback if it fails.
 
 ---
 
