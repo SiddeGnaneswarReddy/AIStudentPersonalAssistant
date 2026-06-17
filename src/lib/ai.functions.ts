@@ -8,14 +8,16 @@ const InputSchema = z.object({
 });
 
 const SYSTEM_PROMPT = `You are an expert tutor. Given study material, generate:
-1. 12 high-quality flashcards (front: question/concept, back: concise complete answer).
-2. 10 multiple-choice quiz questions, each with EXACTLY 4 options. Mark exactly ONE option as correct.
+1. A "notes" array of 12-20 concise bullet points covering EVERY key concept, definition, formula, and important fact from the material. Each bullet is a single self-contained sentence — perfect for quick revision. Cover the material comprehensively in order.
+2. 12 high-quality flashcards (front: question/concept, back: concise complete answer).
+3. 10 multiple-choice quiz questions (MCQ), each with EXACTLY 4 options. Mark exactly ONE option as correct.
    For EVERY option (correct AND incorrect), include a short explanation (1-2 sentences) saying why it is correct or specifically why it is wrong.
 
 Cover the most important, testable ideas from the material. Avoid trivial wording questions.
 
 Return ONLY valid JSON matching this shape (no markdown, no commentary):
 {
+  "notes": ["bullet 1", "bullet 2"],
   "flashcards": [{"front": "...", "back": "..."}],
   "questions": [
     {
@@ -80,6 +82,9 @@ export const processMaterial = createServerFn({ method: "POST" })
 
     const flashcards = Array.isArray(parsed.flashcards) ? parsed.flashcards : [];
     const questions = Array.isArray(parsed.questions) ? parsed.questions : [];
+    const notes = Array.isArray(parsed.notes)
+      ? parsed.notes.map((n: any) => String(n).slice(0, 600)).filter((n: string) => n.trim().length > 0)
+      : [];
 
     if (flashcards.length === 0 || questions.length === 0) {
       await supabase.from("materials").update({ status: "failed", error_message: "AI returned no content" }).eq("id", data.materialId);
@@ -120,7 +125,7 @@ export const processMaterial = createServerFn({ method: "POST" })
       if (error) throw error;
     }
 
-    await supabase.from("materials").update({ status: "ready", error_message: null }).eq("id", data.materialId);
+    await supabase.from("materials").update({ status: "ready", error_message: null, notes }).eq("id", data.materialId);
 
-    return { flashcards: fcRows.length, questions: qRows.length };
+    return { flashcards: fcRows.length, questions: qRows.length, notes: notes.length };
   });

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { BookOpen, Brain, ArrowLeft, FileText } from "lucide-react";
+import { BookOpen, Brain, ArrowLeft, FileText, ScrollText } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/materials/$id")({
+export const Route = createFileRoute("/_authenticated/materials/$id/")({
   component: MaterialDetail,
   head: () => ({ meta: [{ title: "Material — Arcane" }] }),
 });
@@ -47,11 +47,24 @@ function MaterialDetail() {
         </div>
         <h1 className="font-serif text-4xl mb-2">{material.title}</h1>
         <p className="text-ink/60 text-sm">
-          {counts?.fc ?? 0} flashcards • {counts?.q ?? 0} quiz questions
+          {counts?.fc ?? 0} flashcards • {counts?.q ?? 0} quiz questions • {material.notes?.length ?? 0} revision notes
         </p>
       </header>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Link
+          to="/materials/$id/notes"
+          params={{ id }}
+          className="group bg-white border border-ink/5 rounded-3xl p-8 hover:border-moss/40 hover:shadow-sm transition-all"
+        >
+          <ScrollText className="size-6 text-moss mb-6" />
+          <h2 className="font-serif text-2xl mb-2">Revision notes</h2>
+          <p className="text-ink/60 text-sm mb-6">Every key point from your material as quick-scan bullets.</p>
+          <span className="text-moss text-sm font-medium group-hover:gap-3 inline-flex items-center gap-2 transition-all">
+            Read notes →
+          </span>
+        </Link>
+
         <Link
           to="/flashcards/$id"
           params={{ id }}
@@ -71,8 +84,8 @@ function MaterialDetail() {
           className="group bg-moss text-cream rounded-3xl p-8 hover:bg-sage transition-all"
         >
           <Brain className="size-6 text-cream/80 mb-6" />
-          <h2 className="font-serif text-2xl mb-2">Take the quiz</h2>
-          <p className="text-cream/70 text-sm mb-6">Answer one question at a time with instant feedback and explanations.</p>
+          <h2 className="font-serif text-2xl mb-2">Take the MCQ quiz</h2>
+          <p className="text-cream/70 text-sm mb-6">Four-option questions with instant feedback and per-option explanations.</p>
           <span className="text-cream text-sm font-medium group-hover:gap-3 inline-flex items-center gap-2 transition-all">
             Start quiz →
           </span>

@@ -13,11 +13,12 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
 import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated.schedule'
-import { Route as AuthenticatedMaterialsRouteImport } from './routes/_authenticated.materials'
 import { Route as AuthenticatedFocusRouteImport } from './routes/_authenticated.focus'
+import { Route as AuthenticatedMaterialsIndexRouteImport } from './routes/_authenticated.materials.index'
 import { Route as AuthenticatedQuizIdRouteImport } from './routes/_authenticated.quiz.$id'
-import { Route as AuthenticatedMaterialsIdRouteImport } from './routes/_authenticated.materials.$id'
 import { Route as AuthenticatedFlashcardsIdRouteImport } from './routes/_authenticated.flashcards.$id'
+import { Route as AuthenticatedMaterialsIdIndexRouteImport } from './routes/_authenticated.materials.$id.index'
+import { Route as AuthenticatedMaterialsIdNotesRouteImport } from './routes/_authenticated.materials.$id.notes'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -38,31 +39,38 @@ const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
   path: '/schedule',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedMaterialsRoute = AuthenticatedMaterialsRouteImport.update({
-  id: '/materials',
-  path: '/materials',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedFocusRoute = AuthenticatedFocusRouteImport.update({
   id: '/focus',
   path: '/focus',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedMaterialsIndexRoute =
+  AuthenticatedMaterialsIndexRouteImport.update({
+    id: '/materials/',
+    path: '/materials/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedQuizIdRoute = AuthenticatedQuizIdRouteImport.update({
   id: '/quiz/$id',
   path: '/quiz/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedMaterialsIdRoute =
-  AuthenticatedMaterialsIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => AuthenticatedMaterialsRoute,
-  } as any)
 const AuthenticatedFlashcardsIdRoute =
   AuthenticatedFlashcardsIdRouteImport.update({
     id: '/flashcards/$id',
     path: '/flashcards/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaterialsIdIndexRoute =
+  AuthenticatedMaterialsIdIndexRouteImport.update({
+    id: '/materials/$id/',
+    path: '/materials/$id/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaterialsIdNotesRoute =
+  AuthenticatedMaterialsIdNotesRouteImport.update({
+    id: '/materials/$id/notes',
+    path: '/materials/$id/notes',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -70,33 +78,36 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
   '/focus': typeof AuthenticatedFocusRoute
-  '/materials': typeof AuthenticatedMaterialsRouteWithChildren
   '/schedule': typeof AuthenticatedScheduleRoute
   '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
-  '/materials/$id': typeof AuthenticatedMaterialsIdRoute
   '/quiz/$id': typeof AuthenticatedQuizIdRoute
+  '/materials/': typeof AuthenticatedMaterialsIndexRoute
+  '/materials/$id/notes': typeof AuthenticatedMaterialsIdNotesRoute
+  '/materials/$id/': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/focus': typeof AuthenticatedFocusRoute
-  '/materials': typeof AuthenticatedMaterialsRouteWithChildren
   '/schedule': typeof AuthenticatedScheduleRoute
   '/': typeof AuthenticatedIndexRoute
   '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
-  '/materials/$id': typeof AuthenticatedMaterialsIdRoute
   '/quiz/$id': typeof AuthenticatedQuizIdRoute
+  '/materials': typeof AuthenticatedMaterialsIndexRoute
+  '/materials/$id/notes': typeof AuthenticatedMaterialsIdNotesRoute
+  '/materials/$id': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/focus': typeof AuthenticatedFocusRoute
-  '/_authenticated/materials': typeof AuthenticatedMaterialsRouteWithChildren
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
-  '/_authenticated/materials/$id': typeof AuthenticatedMaterialsIdRoute
   '/_authenticated/quiz/$id': typeof AuthenticatedQuizIdRoute
+  '/_authenticated/materials/': typeof AuthenticatedMaterialsIndexRoute
+  '/_authenticated/materials/$id/notes': typeof AuthenticatedMaterialsIdNotesRoute
+  '/_authenticated/materials/$id/': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -104,32 +115,35 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/focus'
-    | '/materials'
     | '/schedule'
     | '/flashcards/$id'
-    | '/materials/$id'
     | '/quiz/$id'
+    | '/materials/'
+    | '/materials/$id/notes'
+    | '/materials/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
     | '/focus'
-    | '/materials'
     | '/schedule'
     | '/'
     | '/flashcards/$id'
-    | '/materials/$id'
     | '/quiz/$id'
+    | '/materials'
+    | '/materials/$id/notes'
+    | '/materials/$id'
   id:
     | '__root__'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/focus'
-    | '/_authenticated/materials'
     | '/_authenticated/schedule'
     | '/_authenticated/'
     | '/_authenticated/flashcards/$id'
-    | '/_authenticated/materials/$id'
     | '/_authenticated/quiz/$id'
+    | '/_authenticated/materials/'
+    | '/_authenticated/materials/$id/notes'
+    | '/_authenticated/materials/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -167,18 +181,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedScheduleRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/materials': {
-      id: '/_authenticated/materials'
-      path: '/materials'
-      fullPath: '/materials'
-      preLoaderRoute: typeof AuthenticatedMaterialsRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/focus': {
       id: '/_authenticated/focus'
       path: '/focus'
       fullPath: '/focus'
       preLoaderRoute: typeof AuthenticatedFocusRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/materials/': {
+      id: '/_authenticated/materials/'
+      path: '/materials'
+      fullPath: '/materials/'
+      preLoaderRoute: typeof AuthenticatedMaterialsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/quiz/$id': {
@@ -188,13 +202,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuizIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/materials/$id': {
-      id: '/_authenticated/materials/$id'
-      path: '/$id'
-      fullPath: '/materials/$id'
-      preLoaderRoute: typeof AuthenticatedMaterialsIdRouteImport
-      parentRoute: typeof AuthenticatedMaterialsRoute
-    }
     '/_authenticated/flashcards/$id': {
       id: '/_authenticated/flashcards/$id'
       path: '/flashcards/$id'
@@ -202,39 +209,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFlashcardsIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/materials/$id/': {
+      id: '/_authenticated/materials/$id/'
+      path: '/materials/$id'
+      fullPath: '/materials/$id/'
+      preLoaderRoute: typeof AuthenticatedMaterialsIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/materials/$id/notes': {
+      id: '/_authenticated/materials/$id/notes'
+      path: '/materials/$id/notes'
+      fullPath: '/materials/$id/notes'
+      preLoaderRoute: typeof AuthenticatedMaterialsIdNotesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
-
-interface AuthenticatedMaterialsRouteChildren {
-  AuthenticatedMaterialsIdRoute: typeof AuthenticatedMaterialsIdRoute
-}
-
-const AuthenticatedMaterialsRouteChildren: AuthenticatedMaterialsRouteChildren =
-  {
-    AuthenticatedMaterialsIdRoute: AuthenticatedMaterialsIdRoute,
-  }
-
-const AuthenticatedMaterialsRouteWithChildren =
-  AuthenticatedMaterialsRoute._addFileChildren(
-    AuthenticatedMaterialsRouteChildren,
-  )
 
 interface AuthenticatedRouteChildren {
   AuthenticatedFocusRoute: typeof AuthenticatedFocusRoute
-  AuthenticatedMaterialsRoute: typeof AuthenticatedMaterialsRouteWithChildren
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedFlashcardsIdRoute: typeof AuthenticatedFlashcardsIdRoute
   AuthenticatedQuizIdRoute: typeof AuthenticatedQuizIdRoute
+  AuthenticatedMaterialsIndexRoute: typeof AuthenticatedMaterialsIndexRoute
+  AuthenticatedMaterialsIdNotesRoute: typeof AuthenticatedMaterialsIdNotesRoute
+  AuthenticatedMaterialsIdIndexRoute: typeof AuthenticatedMaterialsIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedFocusRoute: AuthenticatedFocusRoute,
-  AuthenticatedMaterialsRoute: AuthenticatedMaterialsRouteWithChildren,
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedFlashcardsIdRoute: AuthenticatedFlashcardsIdRoute,
   AuthenticatedQuizIdRoute: AuthenticatedQuizIdRoute,
+  AuthenticatedMaterialsIndexRoute: AuthenticatedMaterialsIndexRoute,
+  AuthenticatedMaterialsIdNotesRoute: AuthenticatedMaterialsIdNotesRoute,
+  AuthenticatedMaterialsIdIndexRoute: AuthenticatedMaterialsIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
