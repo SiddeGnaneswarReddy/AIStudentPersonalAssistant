@@ -125,7 +125,7 @@ export const processMaterial = createServerFn({ method: "POST" })
       if (error) throw error;
     }
 
-    await supabase.from("materials").update({ status: "ready", error_message: null }).eq("id", data.materialId);
+    await supabase.from("materials").update({ status: "ready", error_message: null, notes }).eq("id", data.materialId);
 
-    return { flashcards: fcRows.length, questions: qRows.length };
+    return { flashcards: fcRows.length, questions: qRows.length, notes: notes.length };
   });
