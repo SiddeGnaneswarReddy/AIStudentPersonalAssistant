@@ -82,6 +82,9 @@ export const processMaterial = createServerFn({ method: "POST" })
 
     const flashcards = Array.isArray(parsed.flashcards) ? parsed.flashcards : [];
     const questions = Array.isArray(parsed.questions) ? parsed.questions : [];
+    const notes = Array.isArray(parsed.notes)
+      ? parsed.notes.map((n: any) => String(n).slice(0, 600)).filter((n: string) => n.trim().length > 0)
+      : [];
 
     if (flashcards.length === 0 || questions.length === 0) {
       await supabase.from("materials").update({ status: "failed", error_message: "AI returned no content" }).eq("id", data.materialId);
