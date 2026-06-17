@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Upload, FileText, Trash2, Loader2 } from "lucide-react";
 import { StatusPill } from "./_authenticated.index";
 
-export const Route = createFileRoute("/_authenticated/materials")({
+export const Route = createFileRoute("/_authenticated/materials/")({
   component: MaterialsPage,
   head: () => ({ meta: [{ title: "Materials — Arcane" }] }),
 });

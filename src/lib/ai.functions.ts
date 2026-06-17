@@ -8,14 +8,16 @@ const InputSchema = z.object({
 });
 
 const SYSTEM_PROMPT = `You are an expert tutor. Given study material, generate:
-1. 12 high-quality flashcards (front: question/concept, back: concise complete answer).
-2. 10 multiple-choice quiz questions, each with EXACTLY 4 options. Mark exactly ONE option as correct.
+1. A "notes" array of 12-20 concise bullet points covering EVERY key concept, definition, formula, and important fact from the material. Each bullet is a single self-contained sentence — perfect for quick revision. Cover the material comprehensively in order.
+2. 12 high-quality flashcards (front: question/concept, back: concise complete answer).
+3. 10 multiple-choice quiz questions (MCQ), each with EXACTLY 4 options. Mark exactly ONE option as correct.
    For EVERY option (correct AND incorrect), include a short explanation (1-2 sentences) saying why it is correct or specifically why it is wrong.
 
 Cover the most important, testable ideas from the material. Avoid trivial wording questions.
 
 Return ONLY valid JSON matching this shape (no markdown, no commentary):
 {
+  "notes": ["bullet 1", "bullet 2"],
   "flashcards": [{"front": "...", "back": "..."}],
   "questions": [
     {
