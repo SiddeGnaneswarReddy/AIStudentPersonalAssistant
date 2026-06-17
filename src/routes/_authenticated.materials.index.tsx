@@ -150,7 +150,7 @@ function UploadDropzone({
         const f = e.dataTransfer.files?.[0];
         if (f && f.type === "application/pdf") onFile(f);
       }}
-      className={`block rounded-3xl border-2 border-dashed p-14 text-center transition-all cursor-pointer ${
+      className={`block rounded-2xl border-2 border-dashed py-7 px-6 transition-all cursor-pointer ${
         drag ? "border-moss bg-sand/60" : "border-ink/15 bg-sand/20 hover:border-moss/50"
       } ${uploading ? "pointer-events-none opacity-80" : ""}`}
     >
@@ -166,18 +166,25 @@ function UploadDropzone({
         }}
       />
       {uploading ? (
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="size-6 text-moss animate-spin" />
-          <p className="font-serif text-xl">{progress || "Working…"}</p>
-          <p className="text-xs text-ink/50">This usually takes 15–30 seconds.</p>
+        <div className="flex items-center gap-4 justify-center">
+          <Loader2 className="size-5 text-moss animate-spin" />
+          <div>
+            <p className="font-serif text-lg leading-tight">{progress || "Working…"}</p>
+            <p className="text-xs text-ink/50">Usually takes 15–30 seconds.</p>
+          </div>
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-3">
-          <div className="size-12 rounded-full bg-moss/10 flex items-center justify-center">
+        <div className="flex items-center gap-5">
+          <div className="size-11 rounded-full bg-moss/10 flex items-center justify-center shrink-0">
             <Upload className="size-5 text-moss" />
           </div>
-          <p className="font-serif text-xl">Drop a PDF here, or click to choose</p>
-          <p className="text-xs text-ink/50">Lecture notes, textbook chapters, papers — up to 20 MB</p>
+          <div className="flex-1 min-w-0">
+            <p className="font-serif text-lg leading-tight">Drag a PDF here, or click to upload</p>
+            <p className="text-xs text-ink/50 mt-1">Supported: Notes • Textbooks • Slides • Research papers — up to 20 MB</p>
+          </div>
+          <span className="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-moss text-cream rounded-full text-xs font-medium shrink-0">
+            Upload Material
+          </span>
         </div>
       )}
     </label>
