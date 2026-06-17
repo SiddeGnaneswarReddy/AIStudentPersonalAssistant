@@ -45,39 +45,69 @@ export const processMaterial = createServerFn({ method: "POST" })
       throw new Error("Material not found");
     }
 
-    const apiKey = process.env.LOVABLE_API_KEY;
-    if (!apiKey) throw new Error("AI is not configured");
+    const lovableKey = process.env.LOVABLE_API_KEY;
+    const groqKey = process.env.GROQ_API_KEY;
+    if (!lovableKey && !groqKey) {
+      throw new Error("AI is not configured (set LOVABLE_API_KEY or GROQ_API_KEY)");
+    }
 
-    let parsed: any;
-    try {
+    const messages = [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: `STUDY MATERIAL:\n\n${data.text}` },
+    ];
+
+    async function callLovable(): Promise<string> {
       const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Lovable-API-Key": apiKey,
-        },
+        headers: { "Content-Type": "application/json", "Lovable-API-Key": lovableKey! },
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           response_format: { type: "json_object" },
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: `STUDY MATERIAL:\n\n${data.text}` },
-          ],
+          messages,
         }),
       });
-
-      if (res.status === 429) throw new Error("Rate limit reached. Try again in a moment.");
-      if (res.status === 402) throw new Error("AI credits exhausted. Add credits in workspace settings.");
-      if (!res.ok) {
-        const t = await res.text();
-        throw new Error(`AI request failed: ${res.status} ${t.slice(0, 200)}`);
-      }
+      if (!res.ok) throw new Error(`Lovable AI ${res.status}: ${(await res.text()).slice(0, 200)}`);
       const json = await res.json();
-      const content = json.choices?.[0]?.message?.content ?? "";
-      parsed = JSON.parse(content);
-    } catch (e: any) {
-      await supabase.from("materials").update({ status: "failed", error_message: e.message?.slice(0, 500) ?? "AI failed" }).eq("id", data.materialId);
-      throw e;
+      return json.choices?.[0]?.message?.content ?? "";
+    }
+
+    async function callGroq(): Promise<string> {
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${groqKey!}` },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          response_format: { type: "json_object" },
+          messages,
+        }),
+      });
+      if (!res.ok) throw new Error(`Groq ${res.status}: ${(await res.text()).slice(0, 200)}`);
+      const json = await res.json();
+      return json.choices?.[0]?.message?.content ?? "";
+    }
+
+    const providers: Array<{ name: string; fn: () => Promise<string> }> = [];
+    if (lovableKey) providers.push({ name: "lovable", fn: callLovable });
+    if (groqKey) providers.push({ name: "groq", fn: callGroq });
+
+    let parsed: any;
+    let lastErr: any;
+    for (const p of providers) {
+      try {
+        const content = await p.fn();
+        parsed = JSON.parse(content);
+        console.log(`AI succeeded via ${p.name}`);
+        lastErr = null;
+        break;
+      } catch (e: any) {
+        lastErr = e;
+        console.error(`AI provider ${p.name} failed:`, e?.message);
+      }
+    }
+    if (!parsed) {
+      const msg = lastErr?.message ?? "All AI providers failed";
+      await supabase.from("materials").update({ status: "failed", error_message: msg.slice(0, 500) }).eq("id", data.materialId);
+      throw new Error(msg);
     }
 
     const flashcards = Array.isArray(parsed.flashcards) ? parsed.flashcards : [];
