@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, Navigate, useNavigate, useLocation } fro
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { BookOpen, LayoutDashboard, Library, Calendar, Brain, Sparkles, Moon, LogOut } from "lucide-react";
+import { BookOpen, LayoutDashboard, Library, Calendar, Brain, Sparkles, Moon, LogOut, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -65,6 +65,8 @@ function AuthedLayout() {
             <NavLink to="/" icon={LayoutDashboard}>Dashboard</NavLink>
             <NavLink to="/materials" icon={Library}>Materials</NavLink>
             <NavLink to="/schedule" icon={Calendar}>Schedule</NavLink>
+            <NavLink to="/analytics" icon={BarChart3}>Analytics</NavLink>
+
           </div>
           <div className="space-y-1">
             <p className="text-[10px] uppercase tracking-widest text-ink/40 font-bold mb-3 px-3">Practice</p>
