@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, Brain, ArrowLeft, FileText, ScrollText } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/materials/$id")({
+export const Route = createFileRoute("/_authenticated/materials/$id/")({
   component: MaterialDetail,
   head: () => ({ meta: [{ title: "Material — Arcane" }] }),
 });

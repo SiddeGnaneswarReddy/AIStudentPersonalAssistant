@@ -16,8 +16,8 @@ import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedFocusRouteImport } from './routes/_authenticated.focus'
 import { Route as AuthenticatedMaterialsIndexRouteImport } from './routes/_authenticated.materials.index'
 import { Route as AuthenticatedQuizIdRouteImport } from './routes/_authenticated.quiz.$id'
-import { Route as AuthenticatedMaterialsIdRouteImport } from './routes/_authenticated.materials.$id'
 import { Route as AuthenticatedFlashcardsIdRouteImport } from './routes/_authenticated.flashcards.$id'
+import { Route as AuthenticatedMaterialsIdIndexRouteImport } from './routes/_authenticated.materials.$id.index'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -54,16 +54,16 @@ const AuthenticatedQuizIdRoute = AuthenticatedQuizIdRouteImport.update({
   path: '/quiz/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedMaterialsIdRoute =
-  AuthenticatedMaterialsIdRouteImport.update({
-    id: '/materials/$id',
-    path: '/materials/$id',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedFlashcardsIdRoute =
   AuthenticatedFlashcardsIdRouteImport.update({
     id: '/flashcards/$id',
     path: '/flashcards/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMaterialsIdIndexRoute =
+  AuthenticatedMaterialsIdIndexRouteImport.update({
+    id: '/materials/$id/',
+    path: '/materials/$id/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -73,9 +73,9 @@ export interface FileRoutesByFullPath {
   '/focus': typeof AuthenticatedFocusRoute
   '/schedule': typeof AuthenticatedScheduleRoute
   '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
-  '/materials/$id': typeof AuthenticatedMaterialsIdRoute
   '/quiz/$id': typeof AuthenticatedQuizIdRoute
   '/materials/': typeof AuthenticatedMaterialsIndexRoute
+  '/materials/$id/': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
@@ -83,9 +83,9 @@ export interface FileRoutesByTo {
   '/schedule': typeof AuthenticatedScheduleRoute
   '/': typeof AuthenticatedIndexRoute
   '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
-  '/materials/$id': typeof AuthenticatedMaterialsIdRoute
   '/quiz/$id': typeof AuthenticatedQuizIdRoute
   '/materials': typeof AuthenticatedMaterialsIndexRoute
+  '/materials/$id': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,9 +95,9 @@ export interface FileRoutesById {
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
-  '/_authenticated/materials/$id': typeof AuthenticatedMaterialsIdRoute
   '/_authenticated/quiz/$id': typeof AuthenticatedQuizIdRoute
   '/_authenticated/materials/': typeof AuthenticatedMaterialsIndexRoute
+  '/_authenticated/materials/$id/': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,9 +107,9 @@ export interface FileRouteTypes {
     | '/focus'
     | '/schedule'
     | '/flashcards/$id'
-    | '/materials/$id'
     | '/quiz/$id'
     | '/materials/'
+    | '/materials/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
@@ -117,9 +117,9 @@ export interface FileRouteTypes {
     | '/schedule'
     | '/'
     | '/flashcards/$id'
-    | '/materials/$id'
     | '/quiz/$id'
     | '/materials'
+    | '/materials/$id'
   id:
     | '__root__'
     | '/_authenticated'
@@ -128,9 +128,9 @@ export interface FileRouteTypes {
     | '/_authenticated/schedule'
     | '/_authenticated/'
     | '/_authenticated/flashcards/$id'
-    | '/_authenticated/materials/$id'
     | '/_authenticated/quiz/$id'
     | '/_authenticated/materials/'
+    | '/_authenticated/materials/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -189,18 +189,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQuizIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/materials/$id': {
-      id: '/_authenticated/materials/$id'
-      path: '/materials/$id'
-      fullPath: '/materials/$id'
-      preLoaderRoute: typeof AuthenticatedMaterialsIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/flashcards/$id': {
       id: '/_authenticated/flashcards/$id'
       path: '/flashcards/$id'
       fullPath: '/flashcards/$id'
       preLoaderRoute: typeof AuthenticatedFlashcardsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/materials/$id/': {
+      id: '/_authenticated/materials/$id/'
+      path: '/materials/$id'
+      fullPath: '/materials/$id/'
+      preLoaderRoute: typeof AuthenticatedMaterialsIdIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
   }
@@ -211,9 +211,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedFlashcardsIdRoute: typeof AuthenticatedFlashcardsIdRoute
-  AuthenticatedMaterialsIdRoute: typeof AuthenticatedMaterialsIdRoute
   AuthenticatedQuizIdRoute: typeof AuthenticatedQuizIdRoute
   AuthenticatedMaterialsIndexRoute: typeof AuthenticatedMaterialsIndexRoute
+  AuthenticatedMaterialsIdIndexRoute: typeof AuthenticatedMaterialsIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -221,9 +221,9 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedFlashcardsIdRoute: AuthenticatedFlashcardsIdRoute,
-  AuthenticatedMaterialsIdRoute: AuthenticatedMaterialsIdRoute,
   AuthenticatedQuizIdRoute: AuthenticatedQuizIdRoute,
   AuthenticatedMaterialsIndexRoute: AuthenticatedMaterialsIndexRoute,
+  AuthenticatedMaterialsIdIndexRoute: AuthenticatedMaterialsIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
