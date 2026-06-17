@@ -46,6 +46,8 @@ npm run dev
 
 Your app will open at: **http://localhost:3000**
 
+> **Note:** AI-powered features (like PDF processing) rely on Lovable-managed secrets that only work in the cloud environment. Test those features on your **Lovable preview URL** instead of localhost.
+
 ---
 
 ## Keeping Your Code Up to Date
