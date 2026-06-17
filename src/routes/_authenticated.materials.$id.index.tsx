@@ -117,7 +117,8 @@ function ActionCard({
   return (
     <Link
       to={to}
-      params={{ id }}
+      params={{ id } as any}
+
       className={`group rounded-3xl p-7 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all ${base}`}
     >
       <Icon className={`size-6 mb-5 ${dark ? "text-cream/80" : "text-moss"}`} />
