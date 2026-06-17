@@ -14,7 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      flashcards: {
+        Row: {
+          back: string
+          created_at: string
+          due_at: string
+          ease: number
+          front: string
+          id: string
+          interval_days: number
+          material_id: string
+          reps: number
+          user_id: string
+        }
+        Insert: {
+          back: string
+          created_at?: string
+          due_at?: string
+          ease?: number
+          front: string
+          id?: string
+          interval_days?: number
+          material_id: string
+          reps?: number
+          user_id: string
+        }
+        Update: {
+          back?: string
+          created_at?: string
+          due_at?: string
+          ease?: number
+          front?: string
+          id?: string
+          interval_days?: number
+          material_id?: string
+          reps?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flashcards_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      focus_sessions: {
+        Row: {
+          duration_seconds: number
+          id: string
+          started_at: string
+          user_id: string
+        }
+        Insert: {
+          duration_seconds: number
+          id?: string
+          started_at?: string
+          user_id: string
+        }
+        Update: {
+          duration_seconds?: number
+          id?: string
+          started_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      materials: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          pdf_path: string | null
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          pdf_path?: string | null
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          pdf_path?: string | null
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      quiz_attempts: {
+        Row: {
+          attempt_round: number
+          created_at: string
+          id: string
+          is_correct: boolean
+          material_id: string
+          question_id: string
+          selected_index: number
+          user_id: string
+        }
+        Insert: {
+          attempt_round?: number
+          created_at?: string
+          id?: string
+          is_correct: boolean
+          material_id: string
+          question_id: string
+          selected_index: number
+          user_id: string
+        }
+        Update: {
+          attempt_round?: number
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          material_id?: string
+          question_id?: string
+          selected_index?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_attempts_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_attempts_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "quiz_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_questions: {
+        Row: {
+          created_at: string
+          id: string
+          material_id: string
+          options: Json
+          position: number
+          question: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          material_id: string
+          options: Json
+          position?: number
+          question: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          material_id?: string
+          options?: Json
+          position?: number
+          question?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_questions_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materials"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
