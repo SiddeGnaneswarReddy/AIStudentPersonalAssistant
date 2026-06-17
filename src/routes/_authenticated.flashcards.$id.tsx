@@ -54,7 +54,7 @@ function FlashcardsPage() {
     }).eq("id", card.id);
     qc.invalidateQueries({ queryKey: ["due-count"] });
 
-    if (idx + 1 < cards.length) {
+    if (idx + 1 < (cards?.length ?? 0)) {
       setIdx(idx + 1);
       setRevealed(false);
     } else {
