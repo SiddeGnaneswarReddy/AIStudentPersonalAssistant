@@ -9,61 +9,242 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
+import { Route as AuthenticatedScheduleRouteImport } from './routes/_authenticated.schedule'
+import { Route as AuthenticatedMaterialsRouteImport } from './routes/_authenticated.materials'
+import { Route as AuthenticatedFocusRouteImport } from './routes/_authenticated.focus'
+import { Route as AuthenticatedQuizIdRouteImport } from './routes/_authenticated.quiz.$id'
+import { Route as AuthenticatedMaterialsIdRouteImport } from './routes/_authenticated.materials.$id'
+import { Route as AuthenticatedFlashcardsIdRouteImport } from './routes/_authenticated.flashcards.$id'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedScheduleRoute = AuthenticatedScheduleRouteImport.update({
+  id: '/schedule',
+  path: '/schedule',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMaterialsRoute = AuthenticatedMaterialsRouteImport.update({
+  id: '/materials',
+  path: '/materials',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedFocusRoute = AuthenticatedFocusRouteImport.update({
+  id: '/focus',
+  path: '/focus',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedQuizIdRoute = AuthenticatedQuizIdRouteImport.update({
+  id: '/quiz/$id',
+  path: '/quiz/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMaterialsIdRoute =
+  AuthenticatedMaterialsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => AuthenticatedMaterialsRoute,
+  } as any)
+const AuthenticatedFlashcardsIdRoute =
+  AuthenticatedFlashcardsIdRouteImport.update({
+    id: '/flashcards/$id',
+    path: '/flashcards/$id',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/auth': typeof AuthRoute
+  '/focus': typeof AuthenticatedFocusRoute
+  '/materials': typeof AuthenticatedMaterialsRouteWithChildren
+  '/schedule': typeof AuthenticatedScheduleRoute
+  '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
+  '/materials/$id': typeof AuthenticatedMaterialsIdRoute
+  '/quiz/$id': typeof AuthenticatedQuizIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/focus': typeof AuthenticatedFocusRoute
+  '/materials': typeof AuthenticatedMaterialsRouteWithChildren
+  '/schedule': typeof AuthenticatedScheduleRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
+  '/materials/$id': typeof AuthenticatedMaterialsIdRoute
+  '/quiz/$id': typeof AuthenticatedQuizIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/focus': typeof AuthenticatedFocusRoute
+  '/_authenticated/materials': typeof AuthenticatedMaterialsRouteWithChildren
+  '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
+  '/_authenticated/materials/$id': typeof AuthenticatedMaterialsIdRoute
+  '/_authenticated/quiz/$id': typeof AuthenticatedQuizIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/focus'
+    | '/materials'
+    | '/schedule'
+    | '/flashcards/$id'
+    | '/materials/$id'
+    | '/quiz/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/auth'
+    | '/focus'
+    | '/materials'
+    | '/schedule'
+    | '/'
+    | '/flashcards/$id'
+    | '/materials/$id'
+    | '/quiz/$id'
+  id:
+    | '__root__'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/focus'
+    | '/_authenticated/materials'
+    | '/_authenticated/schedule'
+    | '/_authenticated/'
+    | '/_authenticated/flashcards/$id'
+    | '/_authenticated/materials/$id'
+    | '/_authenticated/quiz/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/schedule': {
+      id: '/_authenticated/schedule'
+      path: '/schedule'
+      fullPath: '/schedule'
+      preLoaderRoute: typeof AuthenticatedScheduleRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/materials': {
+      id: '/_authenticated/materials'
+      path: '/materials'
+      fullPath: '/materials'
+      preLoaderRoute: typeof AuthenticatedMaterialsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/focus': {
+      id: '/_authenticated/focus'
+      path: '/focus'
+      fullPath: '/focus'
+      preLoaderRoute: typeof AuthenticatedFocusRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/quiz/$id': {
+      id: '/_authenticated/quiz/$id'
+      path: '/quiz/$id'
+      fullPath: '/quiz/$id'
+      preLoaderRoute: typeof AuthenticatedQuizIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/materials/$id': {
+      id: '/_authenticated/materials/$id'
+      path: '/$id'
+      fullPath: '/materials/$id'
+      preLoaderRoute: typeof AuthenticatedMaterialsIdRouteImport
+      parentRoute: typeof AuthenticatedMaterialsRoute
+    }
+    '/_authenticated/flashcards/$id': {
+      id: '/_authenticated/flashcards/$id'
+      path: '/flashcards/$id'
+      fullPath: '/flashcards/$id'
+      preLoaderRoute: typeof AuthenticatedFlashcardsIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedMaterialsRouteChildren {
+  AuthenticatedMaterialsIdRoute: typeof AuthenticatedMaterialsIdRoute
+}
+
+const AuthenticatedMaterialsRouteChildren: AuthenticatedMaterialsRouteChildren =
+  {
+    AuthenticatedMaterialsIdRoute: AuthenticatedMaterialsIdRoute,
+  }
+
+const AuthenticatedMaterialsRouteWithChildren =
+  AuthenticatedMaterialsRoute._addFileChildren(
+    AuthenticatedMaterialsRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedFocusRoute: typeof AuthenticatedFocusRoute
+  AuthenticatedMaterialsRoute: typeof AuthenticatedMaterialsRouteWithChildren
+  AuthenticatedScheduleRoute: typeof AuthenticatedScheduleRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedFlashcardsIdRoute: typeof AuthenticatedFlashcardsIdRoute
+  AuthenticatedQuizIdRoute: typeof AuthenticatedQuizIdRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedFocusRoute: AuthenticatedFocusRoute,
+  AuthenticatedMaterialsRoute: AuthenticatedMaterialsRouteWithChildren,
+  AuthenticatedScheduleRoute: AuthenticatedScheduleRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedFlashcardsIdRoute: AuthenticatedFlashcardsIdRoute,
+  AuthenticatedQuizIdRoute: AuthenticatedQuizIdRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
