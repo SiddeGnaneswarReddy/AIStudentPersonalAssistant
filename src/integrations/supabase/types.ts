@@ -87,6 +87,7 @@ export type Database = {
           created_at: string
           error_message: string | null
           id: string
+          notes: string[]
           pdf_path: string | null
           status: string
           title: string
@@ -96,6 +97,7 @@ export type Database = {
           created_at?: string
           error_message?: string | null
           id?: string
+          notes?: string[]
           pdf_path?: string | null
           status?: string
           title: string
@@ -105,6 +107,7 @@ export type Database = {
           created_at?: string
           error_message?: string | null
           id?: string
+          notes?: string[]
           pdf_path?: string | null
           status?: string
           title?: string
