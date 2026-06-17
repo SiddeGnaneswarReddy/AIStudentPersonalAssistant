@@ -18,6 +18,7 @@ import { Route as AuthenticatedMaterialsIndexRouteImport } from './routes/_authe
 import { Route as AuthenticatedQuizIdRouteImport } from './routes/_authenticated.quiz.$id'
 import { Route as AuthenticatedFlashcardsIdRouteImport } from './routes/_authenticated.flashcards.$id'
 import { Route as AuthenticatedMaterialsIdIndexRouteImport } from './routes/_authenticated.materials.$id.index'
+import { Route as AuthenticatedMaterialsIdNotesRouteImport } from './routes/_authenticated.materials.$id.notes'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -66,6 +67,12 @@ const AuthenticatedMaterialsIdIndexRoute =
     path: '/materials/$id/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedMaterialsIdNotesRoute =
+  AuthenticatedMaterialsIdNotesRouteImport.update({
+    id: '/materials/$id/notes',
+    path: '/materials/$id/notes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
   '/quiz/$id': typeof AuthenticatedQuizIdRoute
   '/materials/': typeof AuthenticatedMaterialsIndexRoute
+  '/materials/$id/notes': typeof AuthenticatedMaterialsIdNotesRoute
   '/materials/$id/': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -85,6 +93,7 @@ export interface FileRoutesByTo {
   '/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
   '/quiz/$id': typeof AuthenticatedQuizIdRoute
   '/materials': typeof AuthenticatedMaterialsIndexRoute
+  '/materials/$id/notes': typeof AuthenticatedMaterialsIdNotesRoute
   '/materials/$id': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRoutesById {
@@ -97,6 +106,7 @@ export interface FileRoutesById {
   '/_authenticated/flashcards/$id': typeof AuthenticatedFlashcardsIdRoute
   '/_authenticated/quiz/$id': typeof AuthenticatedQuizIdRoute
   '/_authenticated/materials/': typeof AuthenticatedMaterialsIndexRoute
+  '/_authenticated/materials/$id/notes': typeof AuthenticatedMaterialsIdNotesRoute
   '/_authenticated/materials/$id/': typeof AuthenticatedMaterialsIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/flashcards/$id'
     | '/quiz/$id'
     | '/materials/'
+    | '/materials/$id/notes'
     | '/materials/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/flashcards/$id'
     | '/quiz/$id'
     | '/materials'
+    | '/materials/$id/notes'
     | '/materials/$id'
   id:
     | '__root__'
@@ -130,6 +142,7 @@ export interface FileRouteTypes {
     | '/_authenticated/flashcards/$id'
     | '/_authenticated/quiz/$id'
     | '/_authenticated/materials/'
+    | '/_authenticated/materials/$id/notes'
     | '/_authenticated/materials/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -203,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMaterialsIdIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/materials/$id/notes': {
+      id: '/_authenticated/materials/$id/notes'
+      path: '/materials/$id/notes'
+      fullPath: '/materials/$id/notes'
+      preLoaderRoute: typeof AuthenticatedMaterialsIdNotesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -213,6 +233,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedFlashcardsIdRoute: typeof AuthenticatedFlashcardsIdRoute
   AuthenticatedQuizIdRoute: typeof AuthenticatedQuizIdRoute
   AuthenticatedMaterialsIndexRoute: typeof AuthenticatedMaterialsIndexRoute
+  AuthenticatedMaterialsIdNotesRoute: typeof AuthenticatedMaterialsIdNotesRoute
   AuthenticatedMaterialsIdIndexRoute: typeof AuthenticatedMaterialsIdIndexRoute
 }
 
@@ -223,6 +244,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedFlashcardsIdRoute: AuthenticatedFlashcardsIdRoute,
   AuthenticatedQuizIdRoute: AuthenticatedQuizIdRoute,
   AuthenticatedMaterialsIndexRoute: AuthenticatedMaterialsIndexRoute,
+  AuthenticatedMaterialsIdNotesRoute: AuthenticatedMaterialsIdNotesRoute,
   AuthenticatedMaterialsIdIndexRoute: AuthenticatedMaterialsIdIndexRoute,
 }
 
