@@ -116,3 +116,26 @@ Lovable will automatically sync the changes from GitHub within a few moments.
 - **Backend:** Lovable Cloud (Supabase)
 - **Authentication:** Supabase Auth (Google OAuth + Email)
 - **Package Manager:** npm / bun
+
+## Deploy to Vercel
+
+This repo is preconfigured for Vercel. After connecting the GitHub repo on [vercel.com/new](https://vercel.com/new):
+
+1. Vercel auto-detects `vercel.json` — no build settings needed.
+2. Add the following **Environment Variables** in the Vercel project settings:
+
+   **Client (public):**
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_PUBLISHABLE_KEY`
+   - `VITE_SUPABASE_PROJECT_ID`
+
+   **Server (secret):**
+   - `SUPABASE_URL`
+   - `SUPABASE_PUBLISHABLE_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `LOVABLE_API_KEY` *(optional — primary AI provider)*
+   - `GROQ_API_KEY` *(fallback AI provider for quizzes / bullet points)*
+
+3. Click **Deploy**. Subsequent pushes to the connected branch auto-deploy.
+
+The Nitro `vercel` preset is enabled automatically via `NITRO_PRESET=vercel` in `vercel.json`, so the build emits a Vercel-compatible `.vercel/output` directory.
