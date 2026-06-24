@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Navigate, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
@@ -156,6 +156,13 @@ function AuthPage() {
             >
               {busy ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
             </button>
+            {mode === "signin" && (
+              <div className="text-center">
+                <Link to="/reset-password" className="text-sm text-ink/60 hover:text-moss">
+                  Forgot password?
+                </Link>
+              </div>
+            )}
           </form>
 
           <p className="mt-6 text-sm text-ink/60 text-center">
