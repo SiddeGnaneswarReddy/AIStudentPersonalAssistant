@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated.index'
@@ -21,6 +22,11 @@ import { Route as AuthenticatedFlashcardsIdRouteImport } from './routes/_authent
 import { Route as AuthenticatedMaterialsIdIndexRouteImport } from './routes/_authenticated.materials.$id.index'
 import { Route as AuthenticatedMaterialsIdNotesRouteImport } from './routes/_authenticated.materials.$id.notes'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -83,6 +89,7 @@ const AuthenticatedMaterialsIdNotesRoute =
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/focus': typeof AuthenticatedFocusRoute
   '/schedule': typeof AuthenticatedScheduleRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/analytics': typeof AuthenticatedAnalyticsRoute
   '/focus': typeof AuthenticatedFocusRoute
   '/schedule': typeof AuthenticatedScheduleRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/analytics': typeof AuthenticatedAnalyticsRoute
   '/_authenticated/focus': typeof AuthenticatedFocusRoute
   '/_authenticated/schedule': typeof AuthenticatedScheduleRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/reset-password'
     | '/analytics'
     | '/focus'
     | '/schedule'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/reset-password'
     | '/analytics'
     | '/focus'
     | '/schedule'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/auth'
+    | '/reset-password'
     | '/_authenticated/analytics'
     | '/_authenticated/focus'
     | '/_authenticated/schedule'
@@ -161,10 +173,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -276,17 +296,8 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
